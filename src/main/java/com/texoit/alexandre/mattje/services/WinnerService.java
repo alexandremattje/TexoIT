@@ -1,5 +1,6 @@
 package com.texoit.alexandre.mattje.services;
 
+import com.texoit.alexandre.mattje.dto.Interval;
 import com.texoit.alexandre.mattje.dto.ProducerWinner;
 import com.texoit.alexandre.mattje.dto.Winner;
 import com.texoit.alexandre.mattje.dto.WinnerRange;
@@ -13,20 +14,6 @@ import java.util.stream.Collectors;
 @Service
 public class WinnerService {
 
-    @Getter
-    @ToString
-    @AllArgsConstructor
-    static class Interval {
-
-        private Integer previous;
-
-        @Setter
-        private Integer following;
-
-        public Integer difference() {
-            return following - previous;
-        }
-    }
     private final ProducerRepository movieService;
 
     public WinnerService(ProducerRepository movieService) {
@@ -57,7 +44,7 @@ public class WinnerService {
                     .collect(Collectors.toMap(Map.Entry::getKey,
                             entry -> entry.getValue().stream()
                                     // this filter is to remove all interval without following year
-                                    .filter(it -> it.following > 0).collect(Collectors.toList())));
+                                    .filter(it -> it.getFollowing() > 0).collect(Collectors.toList())));
 
         return WinnerRange.builder()
                 .min(extractMinWinner(producerMapped))
@@ -97,8 +84,8 @@ public class WinnerService {
                                 Winner.builder()
                                         .interval(it.difference())
                                         .producer(entry.getKey())
-                                        .previousWin(it.previous)
-                                        .followingWin(it.following)
+                                        .previousWin(it.getPrevious())
+                                        .followingWin(it.getFollowing())
                                         .build());
                     });
                     return winners;
