@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.texoit.alexandre.mattje"
-version = "0.0.1-SNAPSHOT"
+version = "1.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_20
@@ -20,7 +20,13 @@ configurations {
         extendsFrom(configurations.annotationProcessor.get())
     }
 }
-
+sourceSets {
+    test {
+        java {
+            srcDirs("test")
+        }
+    }
+}
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
