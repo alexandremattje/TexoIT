@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.Set;
 
 @Entity(name="producer")
-@Data
+@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
