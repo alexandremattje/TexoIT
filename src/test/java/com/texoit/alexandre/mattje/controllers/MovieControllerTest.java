@@ -2,6 +2,7 @@ package com.texoit.alexandre.mattje.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.texoit.alexandre.mattje.dto.Winner;
 import com.texoit.alexandre.mattje.dto.WinnerRange;
 import com.texoit.alexandre.mattje.model.Movie;
 import com.texoit.alexandre.mattje.model.Producer;
@@ -22,10 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -68,6 +66,7 @@ public class MovieControllerTest {
                 .build());
         ResponseEntity<String> response =
                 this.testRestTemplate.getForEntity(BASE_URL + "/winner_range", String.class);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         ObjectMapper mapper = new ObjectMapper();
         WinnerRange winnerRange = mapper.reader()
@@ -75,7 +74,6 @@ public class MovieControllerTest {
                 .readValue(response.getBody());
         Assertions.assertEquals(0, winnerRange.getMax().size());
         Assertions.assertEquals(0, winnerRange.getMin().size());
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
@@ -109,6 +107,7 @@ public class MovieControllerTest {
                 .build());
         ResponseEntity<String> response =
                 this.testRestTemplate.getForEntity(BASE_URL + "/winner_range", String.class);
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         ObjectMapper mapper = new ObjectMapper();
         WinnerRange winnerRange = mapper.reader()
@@ -116,7 +115,88 @@ public class MovieControllerTest {
                 .readValue(response.getBody());
         Assertions.assertEquals(1, winnerRange.getMax().size());
         Assertions.assertEquals(1, winnerRange.getMin().size());
+    }
+
+    @Test
+    public void oneMinAndTwoMax() throws JsonProcessingException {
+        Set<Producer> producersLoosers = new HashSet<>();
+        producersLoosers.add(this.producerService.findOrCreateProducer("Producer looser 1"));
+        Set<Studio> studios = new HashSet<>();
+        studios.add(this.studioService.findOrCreateStudio("Studio 1"));
+        this.movieService.save(Movie.builder()
+                .winner(false)
+                .title("2000 looser")
+                .producers(producersLoosers)
+                .studios(studios)
+                .year(2000)
+                .build());
+        Set<Producer> producersMin = new HashSet<>();
+        producersMin.add(this.producerService.findOrCreateProducer("Producer min 1"));
+        this.movieService.save(Movie.builder()
+                .winner(true)
+                .title("2000 winner")
+                .producers(producersMin)
+                .studios(studios)
+                .year(2000)
+                .build());
+        this.movieService.save(Movie.builder()
+                .winner(true)
+                .title("2001 winner")
+                .producers(producersMin)
+                .studios(studios)
+                .year(2001)
+                .build());
+        Set<Producer> producersMax = new HashSet<>();
+        producersMax.add(this.producerService.findOrCreateProducer("Producer max 1"));
+        this.movieService.save(Movie.builder()
+                .winner(true)
+                .title("2002 winner")
+                .producers(producersMax)
+                .studios(studios)
+                .year(2002)
+                .build());
+        this.movieService.save(Movie.builder()
+                .winner(true)
+                .title("2005 winner")
+                .producers(producersMax)
+                .studios(studios)
+                .year(2005)
+                .build());
+        this.movieService.save(Movie.builder()
+                .winner(true)
+                .title("2008 winner")
+                .producers(producersMax)
+                .studios(studios)
+                .year(2008)
+                .build());
+        this.movieService.save(Movie.builder()
+                .winner(true)
+                .title("20118 winner")
+                .producers(producersMax)
+                .studios(studios)
+                .year(2011)
+                .build());
+        ResponseEntity<String> response =
+                this.testRestTemplate.getForEntity(BASE_URL + "/winner_range", String.class);
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ObjectMapper mapper = new ObjectMapper();
+        WinnerRange winnerRange = mapper.reader()
+                .forType(WinnerRange.class)
+                .readValue(response.getBody());
+        Assertions.assertEquals(3, winnerRange.getMax().size());
+        Assertions.assertEquals(Arrays.asList(
+                Winner.builder().producer("Producer max 1").previousWin(2002).followingWin(2005).interval(3).build(),
+                Winner.builder().producer("Producer max 1").previousWin(2005).followingWin(2008).interval(3).build(),
+                Winner.builder().producer("Producer max 1").previousWin(2008).followingWin(2011).interval(3).build()
+        ), winnerRange.getMax());
+        Assertions.assertEquals(1, winnerRange.getMin().size());
+        Assertions.assertEquals(Arrays.asList(Winner.builder()
+                        .producer("Producer min 1")
+                        .previousWin(2000)
+                        .followingWin(2001)
+                        .interval(1)
+                .build()), winnerRange.getMin());
     }
 
 }

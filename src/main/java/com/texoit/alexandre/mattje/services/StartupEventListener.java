@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class StartupEventListener implements ApplicationRunner {
 
-    private final String IMPORT_FILE_ARG = "importfile";
+    private final String IMPORT_FILE_ARG = "importFile";
     private final StartupData startupData;
      
     @Autowired

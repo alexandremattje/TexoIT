@@ -37,7 +37,7 @@ public class StartupData {
 
     public void importFile(String fileName) {
         try {
-            File file = ResourceUtils.getFile(String.format("classpath:%s", fileName));
+            File file = ResourceUtils.getFile(String.format("%s", fileName));
             List<String> dataLines = Files.readAllLines(file.toPath());
             if (fileIsValid(dataLines.get(0))) {
                 dataLines.remove(0);
