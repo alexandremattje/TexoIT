@@ -1,6 +1,5 @@
 package com.texoit.alexandre.mattje.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.texoit.alexandre.mattje.dto.Winner;
 import com.texoit.alexandre.mattje.dto.WinnerRange;
 import org.junit.jupiter.api.Assertions;
@@ -9,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
