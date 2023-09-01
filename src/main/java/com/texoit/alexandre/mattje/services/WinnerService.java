@@ -21,11 +21,11 @@ public class WinnerService {
     }
 
     public WinnerRange findWinnerRanger() {
-
         List<ProducerWinner> allWinners = movieService.getAllProducerWithWinnerMovies();
         Map<String, List<Interval>> producerMapped = allWinners.stream().reduce(
                 new HashMap<String, List<Interval>>(),
                 (map, winner) -> {
+                    // create a list with all possibles intervals
                     List<Interval> intervals = map.get(winner.getProducer());
                     if (intervals == null) {
                         intervals = new ArrayList<>();
@@ -37,7 +37,7 @@ public class WinnerService {
                     }
                     map.put(winner.getProducer(), intervals);
                     return map;
-                }, (q, w) -> q)
+                }, (a, b) -> a)
                     // filter invalid entries need to have at least 2 Interval
                     .entrySet().stream()
                     .filter(entry -> entry.getValue().size() > 1)
@@ -60,7 +60,7 @@ public class WinnerService {
                     }
                     return minFromList;
                 }, (a, b) -> a), (a, b) -> a);
-        return getWinners(producerMapped, max);
+        return getWinnersWithDifference(producerMapped, max);
     }
 
     private List<Winner> extractMinWinner(Map<String, List<Interval>> producerMapped) {
@@ -71,10 +71,10 @@ public class WinnerService {
                     }
                     return minFromList;
                 }, (a, b) -> a), (a, b) -> a);
-        return getWinners(producerMapped, min);
+        return getWinnersWithDifference(producerMapped, min);
     }
 
-    private List<Winner> getWinners(Map<String, List<Interval>> producerMapped, int differenceToFind) {
+    private List<Winner> getWinnersWithDifference(Map<String, List<Interval>> producerMapped, int differenceToFind) {
         return producerMapped.entrySet().stream()
                 .filter(entry -> entry.getValue().stream().anyMatch(it -> it.difference() == differenceToFind))
                 .map(entry -> {

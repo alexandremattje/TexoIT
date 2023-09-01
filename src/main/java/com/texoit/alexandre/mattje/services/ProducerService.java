@@ -18,7 +18,6 @@ public class ProducerService {
     }
     public Producer findOrCreateProducer(String producerName) {
         Producer producer = this.producerRepository.findByName(producerName.trim());
-        System.out.println(producerName);
         if (producer != null) {
             return producer;
         }

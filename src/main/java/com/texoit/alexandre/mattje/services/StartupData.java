@@ -5,6 +5,7 @@ import com.texoit.alexandre.mattje.model.Producer;
 import com.texoit.alexandre.mattje.model.Studio;
 import com.texoit.alexandre.mattje.repositories.MovieRepository;
 import com.texoit.alexandre.mattje.repositories.StudioRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class StartupData {
 
@@ -43,7 +45,7 @@ public class StartupData {
                 dataLines.remove(0);
                 dataLines.forEach(this::importLine);
             } else {
-                System.out.printf("Header of %s is invalid. Must be \"%s\"", fileName, FILE_HEADER);
+                log.error("Header of {} is invalid. Must be \"{}\"", fileName, FILE_HEADER);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -51,7 +53,6 @@ public class StartupData {
     }
 
     private void importLine(String line) {
-        System.out.println(line);
         String[] columns = line.split(";");
         Movie movie = Movie.builder()
                 .year(Integer.valueOf(columns[0].trim()))

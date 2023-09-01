@@ -48,7 +48,7 @@ public class MovieControllerTest {
 
     @BeforeEach
     public void beforeEach () {
-        JdbcTestUtils.deleteFromTables(this.jdbcTemplate, "movies_producers", "movie_studios", "producer", "studio", "movie");
+        JdbcTestUtils.deleteFromTables(this.jdbcTemplate, "movies_producers", "movies_studios", "producer", "studio", "movie");
     }
 
     @Test

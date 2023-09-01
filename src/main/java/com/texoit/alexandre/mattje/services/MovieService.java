@@ -16,13 +16,7 @@ public class MovieService {
     }
 
     public void save (Movie movie) {
-        if (movie.getStudios().isEmpty()) {
-            System.out.println("Sem studio");
-        } else if (movie.getProducers().isEmpty()) {
-            System.out.println("Sem producer");
-        } else {
-            movieRepository.save(movie);
-        }
+        this.movieRepository.save(movie);
     }
 
     public List<Movie> findAllWinners() {

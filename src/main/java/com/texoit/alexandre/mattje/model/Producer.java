@@ -18,7 +18,7 @@ public class Producer {
 
     private String name;
 
-    @ManyToMany(targetEntity = Movie.class, fetch = FetchType.EAGER, mappedBy = "producers")
+    @ManyToMany(targetEntity = Movie.class, mappedBy = "producers")
     private Set<Movie> movies;
 
 }

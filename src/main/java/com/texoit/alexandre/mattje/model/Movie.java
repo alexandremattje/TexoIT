@@ -21,6 +21,10 @@ public class Movie {
     private String title;
 
     @ManyToMany(targetEntity = Studio.class, cascade = CascadeType.MERGE)
+    @JoinTable(name = "movies_studios",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "studios_id")
+    )
     private Set<Studio> studios;
 
     @ManyToMany(targetEntity = Producer.class, cascade = CascadeType.MERGE)

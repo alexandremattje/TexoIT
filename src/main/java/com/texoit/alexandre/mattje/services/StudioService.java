@@ -16,7 +16,6 @@ public class StudioService {
     }
     public Studio findOrCreateStudio(String studioName) {
         Studio studio = this.studioRepository.findByName(studioName.trim());
-        System.out.println(studio);
         if (studio != null) {
             return studio;
         }
