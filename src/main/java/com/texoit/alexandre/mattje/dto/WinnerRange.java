@@ -1,6 +1,5 @@
 package com.texoit.alexandre.mattje.dto;
 
-import jakarta.persistence.NamedAttributeNode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

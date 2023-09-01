@@ -1,9 +1,7 @@
 package com.texoit.alexandre.mattje.services;
 
 import com.texoit.alexandre.mattje.model.Producer;
-import com.texoit.alexandre.mattje.model.Studio;
 import com.texoit.alexandre.mattje.repositories.ProducerRepository;
-import com.texoit.alexandre.mattje.repositories.StudioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
