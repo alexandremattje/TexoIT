@@ -6,13 +6,13 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StartupEventListener implements ApplicationRunner {
+public class ApplicationStartUp implements ApplicationRunner {
 
     private final String IMPORT_FILE_ARG = "importFile";
-    private final StartupData startupData;
+    private final StartupDataService startupData;
      
     @Autowired
-    public StartupEventListener(StartupData startupData) {
+    public ApplicationStartUp(StartupDataService startupData) {
         this.startupData = startupData;
     }      
 

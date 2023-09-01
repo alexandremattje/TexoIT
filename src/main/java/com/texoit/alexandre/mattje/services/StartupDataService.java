@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class StartupData {
+public class StartupDataService {
 
     private final String FILE_HEADER = "year;title;studios;producers;winner";
     private final String SPLIT_PARAM = ",| and ";
@@ -27,13 +27,13 @@ public class StartupData {
     private final ProducerService producerService;
 
     @Autowired
-    public StartupData (MovieService movieService, StudioService studioService, ProducerService producerService) {
+    public StartupDataService(MovieService movieService, StudioService studioService, ProducerService producerService) {
         this.movieService = movieService;
         this.studioService = studioService;
         this.producerService = producerService;
     }
 
-    public void importFile(String fileName) {
+    public void importFile(String fileName) throws Exception {
         try {
             File file = ResourceUtils.getFile(String.format("%s", fileName));
             List<String> dataLines = Files.readAllLines(file.toPath());
@@ -42,6 +42,7 @@ public class StartupData {
                 dataLines.forEach(this::importLine);
             } else {
                 log.error("Header of {} is invalid. Must be \"{}\"", fileName, FILE_HEADER);
+                throw new Exception(String.format("Header of %s is invalid. Must be \"%s\"", fileName, FILE_HEADER));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
