@@ -61,7 +61,7 @@ public class WinnerService {
                         return interval.difference();
                     }
                     return minFromList;
-                }, (a, b) -> a), (a, b) -> a);
+                }, (a, b) -> b), (a, b) -> b);
         return getWinnersWithDifference(producerMapped, max);
     }
 
@@ -81,7 +81,7 @@ public class WinnerService {
                 .filter(entry -> entry.getValue().stream().anyMatch(it -> it.difference() == differenceToFind))
                 .map(entry -> {
                     List<Winner> winners = new ArrayList<>();
-                    entry.getValue().forEach(it -> {
+                    entry.getValue().stream().filter(it -> it.difference() == differenceToFind).forEach(it -> {
                         winners.add(
                                 Winner.builder()
                                         .interval(it.difference())

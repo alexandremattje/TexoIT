@@ -11,6 +11,6 @@ public interface ProducerRepository extends JpaRepository<Producer, Long> {
 
     Producer findByName(String name);
 
-    @Query("SELECT new com.texoit.alexandre.mattje.dto.ProducerWinner(p.name, m.year) FROM producer p JOIN p.movies m WHERE m.winner ORDER BY p.name")
+    @Query("SELECT new com.texoit.alexandre.mattje.dto.ProducerWinner(p.name, m.year) FROM producer p JOIN p.movies m WHERE m.winner ORDER BY m.year, p.name")
     List<ProducerWinner> getAllProducerWithWinnerMovies();
 }
