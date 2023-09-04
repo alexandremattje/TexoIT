@@ -20,6 +20,8 @@ public class ApplicationStartUp implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         if (args.containsOption(IMPORT_FILE_ARG)) {
             startupData.importFile(args.getOptionValues(IMPORT_FILE_ARG).get(0));
+        } else {
+            startupData.importFile("movielist.csv");
         }
     }
 }

@@ -56,4 +56,22 @@ public class StartupDataTest {
         ), winnerRange.getMin());
     }
 
+    @Test
+    public void loadValidFileWith3MoreLines() throws Exception {
+        this.startupDataService.importFile("src/test/resources/movielist2.csv");
+        Assertions.assertEquals(209, JdbcTestUtils.countRowsInTable(this.jdbcTemplate, "movie"));
+
+        WinnerRange winnerRange = this.winnerService.findWinnerRanger();
+        Assertions.assertEquals(2, winnerRange.getMax().size());
+        Assertions.assertEquals(Arrays.asList(
+                Winner.builder().producer("Matthew Vaughn").previousWin(1980).followingWin(2002).interval(22).build(),
+                Winner.builder().producer("Matthew Vaughn").previousWin(2015).followingWin(2037).interval(22).build()
+        ), winnerRange.getMax());
+        Assertions.assertEquals(2, winnerRange.getMin().size());
+        Assertions.assertEquals(Arrays.asList(
+                Winner.builder().producer("Joel Silver").previousWin(1990).followingWin(1991).interval(1).build(),
+                Winner.builder().producer("Matthew Vaughn").previousWin(2002).followingWin(2003).interval(1).build()
+        ), winnerRange.getMin());
+    }
+
 }
